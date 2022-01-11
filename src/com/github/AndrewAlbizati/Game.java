@@ -97,7 +97,7 @@ public class Game {
 
                                 if (!prop.getProperty(difficulty.toString().toLowerCase()).equals("")) {
                                     int lowestTime = Integer.parseInt(prop.getProperty(difficulty.toString().toLowerCase()));
-                                    if (lowestTime < Integer.parseInt(timerLabel.getText())) {
+                                    if (lowestTime > Integer.parseInt(timerLabel.getText())) {
                                         prop.setProperty(difficulty.toString().toLowerCase(), timerLabel.getText());
                                         prop.store(new FileOutputStream("minesweeper-lowest-times.properties"), null);
                                     }
