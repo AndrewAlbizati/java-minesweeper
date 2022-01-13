@@ -8,6 +8,7 @@ This program is a Windows Minesweeper clone written in Java 17 using Swing.
    2. Run `gradlew build` in the main folder.
    3. Run the JAR file in `\build\libs\`
 3. If on macOS or Linux:
-   1. Run `./gradle clean` in the main folder.
-   2. Run `./gradle build` in the main folder.
-   3. Run the JAR file in `/build/libs/`
+   1. Run `chmod +x gradlew` in the main folder.
+   2. Run `./gradlew clean` in the main folder.
+   3. Run `./gradlew build` in the main folder.
+   4. Run the JAR file in `/build/libs/`
