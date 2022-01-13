@@ -1,5 +1,20 @@
-.DS_Store
+# Gradle/Java files
 /out/
-/.idea/
+.gradle
+/build/
 *.iml
+
+*.jar
 minesweeper-lowest-times.properties
+
+# macOS files
+*.DS_Store
+
+# IntelliJ files
+/.idea/
+
+# Raspberry Pi files
+/bin/
+.project
+org.eclipse.buildship.core.prefs
+.classpath

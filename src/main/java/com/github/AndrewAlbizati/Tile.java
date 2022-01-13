@@ -3,12 +3,12 @@ package com.github.AndrewAlbizati;
 import javax.swing.*;
 
 public class Tile extends JButton {
-    private final byte row;
-    private final byte col;
-    public byte getRow() {
+    private final int row;
+    private final int col;
+    public int getRow() {
         return row;
     }
-    public byte getColumn() {
+    public int getColumn() {
         return col;
     }
 
@@ -36,15 +36,15 @@ public class Tile extends JButton {
         this.hasFlag = hasFlag;
     }
 
-    private byte number;
-    public byte getNumber() {
+    private int number;
+    public int getNumber() {
         return number;
     }
-    public void setNumber(byte number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
-    public Tile(byte row, byte col) {
+    public Tile(int row, int col) {
         this.row = row;
         this.col = col;
     }

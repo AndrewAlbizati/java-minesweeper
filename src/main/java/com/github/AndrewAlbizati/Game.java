@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
     private final Tile[][] buttons;
-    private final Difficulties difficulty;
 
     private final int rows;
     private final int cols;
@@ -32,7 +31,6 @@ public class Game {
     private final JFrame frame = new JFrame();
 
     public Game(Difficulties difficulty) {
-        this.difficulty = difficulty;
         this.rows = difficulty.rows;
         this.cols = difficulty.columns;
         this.mines = difficulty.mines;
@@ -60,8 +58,8 @@ public class Game {
         buttons = new Tile[rows][cols];
 
         // Create buttons
-        for (byte r = 0; r < rows; r++) {
-            for (byte c = 0; c < cols; c++) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
                 Tile b = new Tile(r, c);
                 b.addMouseListener(new MouseAdapter(){
                     boolean pressed;
@@ -249,7 +247,7 @@ public class Game {
                     }
                 }
 
-                tile.setNumber((byte) adjacentBombs);
+                tile.setNumber(adjacentBombs);
             }
         }
     }

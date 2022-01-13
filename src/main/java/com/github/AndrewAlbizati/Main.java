@@ -2,7 +2,10 @@ package com.github.AndrewAlbizati;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Properties;
 
 public class Main {
@@ -96,12 +99,14 @@ public class Main {
         });
         f.add(expertButton);
 
+
         // Display lowest times
+        Font timeFont = new Font("Verdana", Font.PLAIN, 12);
 
         // Beginner lowest time
         if (beginnerLowestTime != -1) {
             JLabel beginnerLowestTimeLabel = new JLabel("Lowest time: " + beginnerLowestTime, SwingConstants.CENTER);
-            beginnerLowestTimeLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
+            beginnerLowestTimeLabel.setFont(timeFont);
             f.add(beginnerLowestTimeLabel);
         } else {
             f.add(new JLabel(""));
@@ -111,7 +116,7 @@ public class Main {
         // Intermediate lowest time
         if (intermediateLowestTime != -1) {
             JLabel intermediateLowestTimeLabel = new JLabel("Lowest time: " + intermediateLowestTime, SwingConstants.CENTER);
-            intermediateLowestTimeLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
+            intermediateLowestTimeLabel.setFont(timeFont);
             f.add(intermediateLowestTimeLabel);
         } else {
             f.add(new JLabel(""));
@@ -121,7 +126,7 @@ public class Main {
         // Expert lowest time
         if (expertLowestTime != -1) {
             JLabel expertLowestTimeLabel = new JLabel("Lowest time: " + expertLowestTime, SwingConstants.CENTER);
-            expertLowestTimeLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
+            expertLowestTimeLabel.setFont(timeFont);
             f.add(expertLowestTimeLabel);
         } else {
             f.add(new JLabel(""));
