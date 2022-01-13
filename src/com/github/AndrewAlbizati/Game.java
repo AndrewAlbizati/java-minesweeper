@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
     private final Tile[][] buttons;
+    private final Difficulties difficulty;
 
     private final int rows;
     private final int cols;
@@ -31,6 +32,7 @@ public class Game {
     private final JFrame frame = new JFrame();
 
     public Game(Difficulties difficulty) {
+        this.difficulty = difficulty;
         this.rows = difficulty.rows;
         this.cols = difficulty.columns;
         this.mines = difficulty.mines;
@@ -108,6 +110,14 @@ public class Game {
                             } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
+
+                            // Prompt user to play again
+                            int a = JOptionPane.showConfirmDialog(frame, "Play again?", "You won!", JOptionPane.YES_NO_OPTION);
+                            if (a == 0) {
+                                frame.setVisible(false);
+                                Main.main(new String[]{});
+                            }
+                            return;
                         }
                         pressed = false;
                     }
@@ -249,6 +259,10 @@ public class Game {
             return;
         }
 
+        if (gameEnded) {
+            return;
+        }
+
         if (tile.getHasFlag()) {
             tile.setText("");
             tile.setHasFlag(false);
@@ -263,6 +277,9 @@ public class Game {
 
     private void onLeftClick(Tile tile) {
         if (tile.getHasFlag()) {
+            return;
+        }
+        if (gameEnded) {
             return;
         }
 
@@ -280,7 +297,17 @@ public class Game {
         }
 
         if (tile.getHasBomb()) {
-            System.exit(1);
+            revealAllTiles();
+            gameEnded = true;
+            scheduler.shutdown();
+
+            // Prompt user to play again
+            int a = JOptionPane.showConfirmDialog(frame, "Try again?", "You clicked on a bomb!", JOptionPane.YES_NO_OPTION);
+            if (a == 0) {
+                frame.setVisible(false);
+                Main.main(new String[]{});
+            }
+            return;
         }
 
         if (tile.getNumber() != 0) {

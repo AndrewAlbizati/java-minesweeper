@@ -41,6 +41,13 @@ public class Main {
             e.printStackTrace();
         }
 
+        // Make UI uniform across platforms
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         JFrame f = new JFrame();
 
         f.setTitle("Minesweeper (Title Screen)");
