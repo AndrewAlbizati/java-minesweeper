@@ -35,12 +35,14 @@ public class Game {
         this.cols = difficulty.columns;
         this.mines = difficulty.mines;
 
+        Font gameLabelFont = new Font("Verdana", Font.PLAIN, 18);
+
         flagsRemainingLabel = new JLabel(String.valueOf(mines));
-        flagsRemainingLabel.setFont(new Font("Verdana", Font.PLAIN, 18));
+        flagsRemainingLabel.setFont(gameLabelFont);
 
         timerLabel = new JLabel("0");
         timerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        timerLabel.setFont(new Font("Verdana", Font.PLAIN, 18));
+        timerLabel.setFont(gameLabelFont);
 
         frame.setTitle("Minesweeper (" + difficulty.name() + ")");
 
@@ -113,7 +115,7 @@ public class Game {
                             int a = JOptionPane.showConfirmDialog(frame, "Play again?", "You won!", JOptionPane.YES_NO_OPTION);
                             if (a == 0) {
                                 frame.setVisible(false);
-                                Main.main(new String[]{});
+                                Main.generateTitleScreen();
                             }
                             return;
                         }
@@ -137,6 +139,9 @@ public class Game {
         }
     }
 
+    /**
+     * Starts the timer and shows the game to the player.
+     */
     public void start() {
         generateBoard();
 
@@ -151,6 +156,9 @@ public class Game {
         frame.setVisible(true);
     }
 
+    /**
+     * Creates a brand-new board with newly and randomly placed bombs. Removes all flags and hides all tiles.
+     */
     private void generateBoard() {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -252,6 +260,10 @@ public class Game {
         }
     }
 
+    /**
+     * Handles when a user right-clicks on a tile. It can place a flag, remove a flag, or handle when a player wins.
+     * @param tile The tile that was right-clicked clicked on.
+     */
     private void onRightClick(Tile tile) {
         if (tile.getRevealed()) {
             return;
@@ -273,6 +285,10 @@ public class Game {
         refreshBoard();
     }
 
+    /**
+     * Handles when a player left-clicks on a tile. It can end the game or reveal tiles.
+     * @param tile The tile that was left-clicked on.
+     */
     private void onLeftClick(Tile tile) {
         if (tile.getHasFlag()) {
             return;
@@ -303,7 +319,7 @@ public class Game {
             int a = JOptionPane.showConfirmDialog(frame, "Try again?", "You clicked on a bomb!", JOptionPane.YES_NO_OPTION);
             if (a == 0) {
                 frame.setVisible(false);
-                Main.main(new String[]{});
+                Main.generateTitleScreen();
             }
             return;
         }
@@ -316,6 +332,11 @@ public class Game {
         refreshBoard();
     }
 
+    /**
+     * Recursively reveals all tiles that should be revealed.
+     * Reveals all adjacent tiles until it reaches a tile with a number (tile with adjacent bomb).
+     * @param tile Tile that a player has clicked.
+     */
     private void revealSurroundingTiles(Tile tile) {
         if (tile.getHasFlag()) {
             return;
@@ -421,6 +442,10 @@ public class Game {
         }
     }
 
+    /**
+     * Refreshes a board when a player changes any tiles.
+     * Colors tiles, adds "F" to flagged tiles.
+     */
     private void refreshBoard() {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -447,6 +472,10 @@ public class Game {
         }
     }
 
+    /**
+     * Determines if the current board has been completed.
+     * @return if the board has all mines flagged.
+     */
     private boolean hasWin() {
         boolean flag = true;
         int flags = 0;
@@ -474,6 +503,10 @@ public class Game {
         return flag;
     }
 
+    /**
+     * Reveals all tiles to the player.
+     * Bombs are labeled "B", other squares are labeled by their number.
+     */
     private void revealAllTiles() {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {

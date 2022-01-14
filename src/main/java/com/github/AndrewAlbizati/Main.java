@@ -10,10 +10,6 @@ import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
-        int beginnerLowestTime = -1;
-        int intermediateLowestTime = -1;
-        int expertLowestTime = -1;
-
         // Load lowest times
         File f1 = new File("minesweeper-lowest-times.properties");
         try {
@@ -24,7 +20,30 @@ public class Main {
                 fw.append("beginner=\nintermediate=\nexpert=");
                 fw.close();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        // Make UI uniform across platforms
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        generateTitleScreen();
+    }
+
+    /**
+     * Show the title screen with the different difficulty options.
+     * Also shows the lowest times for each difficulty if applicable.
+     */
+    public static void generateTitleScreen() {
+        int beginnerLowestTime = -1;
+        int intermediateLowestTime = -1;
+        int expertLowestTime = -1;
+
+        try {
             Properties prop = new Properties();
             FileInputStream fileInputStream = new FileInputStream("minesweeper-lowest-times.properties");
             prop.load(fileInputStream);
@@ -41,13 +60,6 @@ public class Main {
 
             fileInputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Make UI uniform across platforms
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
             e.printStackTrace();
         }
 
