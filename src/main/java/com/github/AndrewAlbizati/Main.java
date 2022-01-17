@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Main {
+public class Main extends JFrame {
     public static void main(String[] args) {
         // Load lowest times
         File f1 = new File("minesweeper-lowest-times.properties");
@@ -22,23 +22,25 @@ public class Main {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            // Ignoring lowest times
         }
 
         // Make UI uniform across platforms
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace(); // Ignore exception, won't cause any serious issues
         }
 
-        generateTitleScreen();
+        Main main = new Main();
+        main.setVisible(true);
     }
 
     /**
      * Show the title screen with the different difficulty options.
      * Also shows the lowest times for each difficulty if applicable.
      */
-    public static void generateTitleScreen() {
+    public Main() {
         int beginnerLowestTime = -1;
         int intermediateLowestTime = -1;
         int expertLowestTime = -1;
@@ -63,32 +65,30 @@ public class Main {
             e.printStackTrace();
         }
 
-        JFrame f = new JFrame();
-
-        f.setTitle("Minesweeper (Title Screen)");
-        f.setLayout(new GridLayout(3, 3));
-        f.setSize(500,500);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Minesweeper (Title Screen)");
+        this.setLayout(new GridLayout(3, 3));
+        this.setSize(500,500);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Add first row (title)
-        f.add(new JLabel(""));
+        this.add(new JLabel("")); // blank label to take up space on grid
 
         JLabel titleLabel = new JLabel("Minesweeper");
         titleLabel.setFont(new Font("Verdana", Font.PLAIN, 24));
-        f.add(titleLabel);
+        this.add(titleLabel);
 
-        f.add(new JLabel(""));
+        this.add(new JLabel("")); // blank label to take up space on grid
 
 
         // Add second row (buttons)
 
         // Beginner button
         JButton beginnerButton = new JButton("Beginner (" + Difficulties.BEGINNER.rows + " x " + Difficulties.BEGINNER.columns + ")");
-        f.add(beginnerButton);
+        this.add(beginnerButton);
         beginnerButton.addActionListener(e -> {
             Game game = new Game(Difficulties.BEGINNER);
             game.start();
-            f.setVisible(false);
+            this.setVisible(false);
         });
 
 
@@ -97,9 +97,9 @@ public class Main {
         intermediateButton.addActionListener(e -> {
             Game game = new Game(Difficulties.INTERMEDIATE);
             game.start();
-            f.setVisible(false);
+            this.setVisible(false);
         });
-        f.add(intermediateButton);
+        this.add(intermediateButton);
 
 
         // Expert button
@@ -107,9 +107,9 @@ public class Main {
         expertButton.addActionListener(e -> {
             Game game = new Game(Difficulties.EXPERT);
             game.start();
-            f.setVisible(false);
+            this.setVisible(false);
         });
-        f.add(expertButton);
+        this.add(expertButton);
 
 
         // Display lowest times
@@ -119,9 +119,9 @@ public class Main {
         if (beginnerLowestTime != -1) {
             JLabel beginnerLowestTimeLabel = new JLabel("Lowest time: " + beginnerLowestTime, SwingConstants.CENTER);
             beginnerLowestTimeLabel.setFont(timeFont);
-            f.add(beginnerLowestTimeLabel);
+            this.add(beginnerLowestTimeLabel);
         } else {
-            f.add(new JLabel(""));
+            this.add(new JLabel("")); // blank label to take up space on grid
         }
 
 
@@ -129,9 +129,9 @@ public class Main {
         if (intermediateLowestTime != -1) {
             JLabel intermediateLowestTimeLabel = new JLabel("Lowest time: " + intermediateLowestTime, SwingConstants.CENTER);
             intermediateLowestTimeLabel.setFont(timeFont);
-            f.add(intermediateLowestTimeLabel);
+            this.add(intermediateLowestTimeLabel);
         } else {
-            f.add(new JLabel(""));
+            this.add(new JLabel("")); // blank label to take up space on grid
         }
 
 
@@ -139,11 +139,9 @@ public class Main {
         if (expertLowestTime != -1) {
             JLabel expertLowestTimeLabel = new JLabel("Lowest time: " + expertLowestTime, SwingConstants.CENTER);
             expertLowestTimeLabel.setFont(timeFont);
-            f.add(expertLowestTimeLabel);
+            this.add(expertLowestTimeLabel);
         } else {
-            f.add(new JLabel(""));
+            this.add(new JLabel("")); // blank label to take up space on grid
         }
-
-        f.setVisible(true);
     }
 }

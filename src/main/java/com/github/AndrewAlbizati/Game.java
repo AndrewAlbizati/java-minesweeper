@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class Game {
+public class Game extends JFrame {
     private final Tile[][] buttons;
 
     private final int rows;
@@ -28,8 +28,10 @@ public class Game {
 
     private ScheduledExecutorService scheduler;
 
-    private final JFrame frame = new JFrame();
-
+    /**
+     * Sets up a game of Minesweeper that is ready to be started by the "start()" method.
+     * @param difficulty The difficulty that the game will be set to. Changes the size of the board and amount of bombs.
+     */
     public Game(Difficulties difficulty) {
         this.rows = difficulty.rows;
         this.cols = difficulty.columns;
@@ -44,18 +46,19 @@ public class Game {
         timerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         timerLabel.setFont(gameLabelFont);
 
-        frame.setTitle("Minesweeper (" + difficulty.name() + ")");
+        this.setTitle("Minesweeper (" + difficulty.name() + ")");
 
-        frame.setLayout(new GridLayout(rows + 1, cols + 1));
-        frame.setSize(rows * 50,cols * 50);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new GridLayout(rows + 1, cols + 1));
+        this.setSize(rows * 50,cols * 50);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.add(flagsRemainingLabel);
+        this.add(flagsRemainingLabel);
+
         for (int i = 0; i < cols - 2; i ++) {
-            frame.add(new JLabel(""));
+            this.add(new JLabel("")); // blank labels to take up space on grid
         }
 
-        frame.add(timerLabel);
+        this.add(timerLabel);
 
         buttons = new Tile[rows][cols];
 
@@ -63,6 +66,8 @@ public class Game {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Tile b = new Tile(r, c);
+
+                JFrame frame = this;
                 b.addMouseListener(new MouseAdapter(){
                     boolean pressed;
 
@@ -115,7 +120,7 @@ public class Game {
                             int a = JOptionPane.showConfirmDialog(frame, "Play again?", "You won!", JOptionPane.YES_NO_OPTION);
                             if (a == 0) {
                                 frame.setVisible(false);
-                                Main.generateTitleScreen();
+                                new Main().setVisible(true);
                             }
                             return;
                         }
@@ -134,7 +139,7 @@ public class Game {
                 });
 
                 buttons[r][c] = b;
-                frame.add(b);
+                this.add(b);
             }
         }
     }
@@ -153,7 +158,7 @@ public class Game {
                 timerLabel.setText(String.valueOf(Integer.parseInt(timerLabel.getText()) + 1));
             }
         }, 0, 1, TimeUnit.SECONDS);
-        frame.setVisible(true);
+        this.setVisible(true);
     }
 
     /**
@@ -316,10 +321,10 @@ public class Game {
             scheduler.shutdown();
 
             // Prompt user to play again
-            int a = JOptionPane.showConfirmDialog(frame, "Try again?", "You clicked on a bomb!", JOptionPane.YES_NO_OPTION);
+            int a = JOptionPane.showConfirmDialog(this, "Try again?", "You clicked on a bomb!", JOptionPane.YES_NO_OPTION);
             if (a == 0) {
-                frame.setVisible(false);
-                Main.generateTitleScreen();
+                this.setVisible(false);
+                new Main().setVisible(true);
             }
             return;
         }
