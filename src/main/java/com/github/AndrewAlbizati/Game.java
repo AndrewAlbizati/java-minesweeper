@@ -479,28 +479,18 @@ public class Game extends JFrame {
 
     /**
      * Determines if the current board has been completed.
-     * @return if the board has all mines flagged.
+     * @return if all normal tiles have been revealed.
      */
     private boolean hasWin() {
         boolean flag = true;
-        int flags = 0;
         loop:
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
                     Tile tile = buttons[r][c];
-                    // Detect is a bomb hasn't been flagged
-                    if (tile.getHasBomb() && !tile.getHasFlag()) {
+                    // Detect if a normal tile hasn't been revealed
+                    if (!tile.getHasBomb() && !tile.getRevealed()) {
                         flag = false;
                         break loop;
-                    }
-
-                    // Detect if there are more flags than bombs
-                    if (tile.getHasFlag()) {
-                        flags++;
-                        if (flags > mines) {
-                            flag = false;
-                            break loop;
-                        }
                     }
                 }
             }
