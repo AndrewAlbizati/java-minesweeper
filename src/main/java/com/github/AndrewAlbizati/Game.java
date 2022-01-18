@@ -1,5 +1,6 @@
 package com.github.AndrewAlbizati;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -7,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -49,8 +51,20 @@ public class Game extends JFrame {
         this.setTitle("Minesweeper (" + difficulty.name() + ")");
 
         this.setLayout(new GridLayout(rows + 1, cols + 1));
-        this.setSize(rows * 50,cols * 50);
+        this.setSize(cols * 50,cols * 50);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        try {
+            InputStream inputStream = Game.class.getResourceAsStream("/bomb.png");
+            if (inputStream == null) {
+                throw new NullPointerException("bomb.png not found");
+            }
+            Image image = ImageIO.read(inputStream);
+            this.setIconImage(image);
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
+            // Ignore, use default Java logo
+        }
 
         this.add(flagsRemainingLabel);
 
@@ -66,6 +80,8 @@ public class Game extends JFrame {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Tile b = new Tile(r, c);
+
+                b.setFont(new Font("Verdana", Font.PLAIN, 20));
 
                 JFrame frame = this;
                 b.addMouseListener(new MouseAdapter(){
@@ -85,10 +101,13 @@ public class Game extends JFrame {
                         if (pressed) {
                             if (SwingUtilities.isRightMouseButton(e)) {
                                 onRightClick(b);
-                            }
-                            else {
+                            } else if (SwingUtilities.isLeftMouseButton(e)) {
                                 onLeftClick(b);
                             }
+                        }
+
+                        if (gameEnded) {
+                            return;
                         }
 
                         if (hasWin()) {
@@ -96,7 +115,7 @@ public class Game extends JFrame {
                             revealAllTiles();
                             gameEnded = true;
 
-                            // Update lowest times
+                            // Update the lowest times
                             try {
                                 Properties prop = new Properties();
                                 FileInputStream fileInputStream = new FileInputStream("minesweeper-lowest-times.properties");
@@ -152,12 +171,7 @@ public class Game extends JFrame {
 
         // Start timer
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                timerLabel.setText(String.valueOf(Integer.parseInt(timerLabel.getText()) + 1));
-            }
-        }, 0, 1, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(() -> timerLabel.setText(String.valueOf(Integer.parseInt(timerLabel.getText()) + 1)), 0, 1, TimeUnit.SECONDS);
         this.setVisible(true);
     }
 
@@ -449,7 +463,7 @@ public class Game extends JFrame {
 
     /**
      * Refreshes a board when a player changes any tiles.
-     * Colors tiles, adds "F" to flagged tiles.
+     * Color tiles, adds "F" to flagged tiles.
      */
     private void refreshBoard() {
         for (int r = 0; r < rows; r++) {

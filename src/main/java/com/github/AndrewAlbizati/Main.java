@@ -1,28 +1,28 @@
 package com.github.AndrewAlbizati;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 public class Main extends JFrame {
     public static void main(String[] args) {
-        // Load lowest times
+        // Load the lowest times
         File f1 = new File("minesweeper-lowest-times.properties");
         try {
             // Create file if nonexistent
             if (!f1.exists()) {
-                f1.createNewFile();
+                if (!f1.createNewFile()) {
+                    throw new IOException("Error while creating minesweeper-lowest-times.properties");
+                }
                 FileWriter fw = new FileWriter(f1);
                 fw.append("beginner=\nintermediate=\nexpert=");
                 fw.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // Ignoring lowest times
+            // Ignoring the lowest times
         }
 
         // Make UI uniform across platforms
@@ -70,6 +70,19 @@ public class Main extends JFrame {
         this.setSize(500,500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        try {
+            InputStream inputStream = Game.class.getResourceAsStream("/bomb.png");
+            if (inputStream == null) {
+                throw new NullPointerException("bomb.png not found");
+            }
+            Image image = ImageIO.read(inputStream);
+            this.setIconImage(image);
+
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
+            // Ignore, use default Java logo for icon
+        }
+
         // Add first row (title)
         this.add(new JLabel("")); // blank label to take up space on grid
 
@@ -112,7 +125,7 @@ public class Main extends JFrame {
         this.add(expertButton);
 
 
-        // Display lowest times
+        // Display the lowest times
         Font timeFont = new Font("Verdana", Font.PLAIN, 12);
 
         // Beginner lowest time
