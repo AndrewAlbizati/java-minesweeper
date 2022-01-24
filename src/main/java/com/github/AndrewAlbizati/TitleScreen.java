@@ -6,7 +6,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.Properties;
 
-public class Main extends JFrame {
+public class TitleScreen extends JFrame {
     public static void main(String[] args) {
         // Load the lowest times
         File f1 = new File("minesweeper-lowest-times.properties");
@@ -21,8 +21,7 @@ public class Main extends JFrame {
                 fw.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            // Ignoring the lowest times
+            e.printStackTrace(); // Ignoring the lowest times
         }
 
         // Make UI uniform across platforms
@@ -32,15 +31,15 @@ public class Main extends JFrame {
             e.printStackTrace(); // Ignore exception, won't cause any serious issues
         }
 
-        Main main = new Main();
-        main.setVisible(true);
+        TitleScreen titleScreen = new TitleScreen();
+        titleScreen.setVisible(true);
     }
 
     /**
      * Show the title screen with the different difficulty options.
      * Also shows the lowest times for each difficulty if applicable.
      */
-    public Main() {
+    public TitleScreen() {
         int beginnerLowestTime = -1;
         int intermediateLowestTime = -1;
         int expertLowestTime = -1;
@@ -79,8 +78,7 @@ public class Main extends JFrame {
             this.setIconImage(image);
 
         } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
-            // Ignore, use default Java logo for icon
+            e.printStackTrace(); // Ignore, use default Java logo for icon
         }
 
         // Add first row (title)

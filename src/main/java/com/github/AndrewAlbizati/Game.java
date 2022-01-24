@@ -62,8 +62,7 @@ public class Game extends JFrame {
             Image image = ImageIO.read(inputStream);
             this.setIconImage(image);
         } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
-            // Ignore, use default Java logo
+            e.printStackTrace(); // Ignore, use default Java logo
         }
 
         this.add(flagsRemainingLabel);
@@ -139,7 +138,8 @@ public class Game extends JFrame {
                             int a = JOptionPane.showConfirmDialog(frame, "Play again?", "You won!", JOptionPane.YES_NO_OPTION);
                             if (a == 0) {
                                 frame.setVisible(false);
-                                new Main().setVisible(true);
+                                TitleScreen titleScreen = new TitleScreen();
+                                titleScreen.setVisible(true);
                             }
                             return;
                         }
@@ -281,21 +281,19 @@ public class Game extends JFrame {
 
     /**
      * Handles when a user right-clicks on a tile. It can place a flag, remove a flag, or handle when a player wins.
-     * @param tile The tile that was right-clicked clicked on.
+     * @param tile The tile that was right-clicked on.
      */
     private void onRightClick(Tile tile) {
         if (tile.getRevealed()) {
             return;
         }
 
-        if (gameEnded) {
-            return;
-        }
-
+        // Remove flag
         if (tile.getHasFlag()) {
             tile.setText("");
             tile.setHasFlag(false);
             flagsRemainingLabel.setText(String.valueOf(Integer.parseInt(flagsRemainingLabel.getText()) + 1));
+        // Place flag
         } else {
             tile.setText("F");
             tile.setHasFlag(true);
@@ -310,10 +308,7 @@ public class Game extends JFrame {
      */
     private void onLeftClick(Tile tile) {
         if (tile.getHasFlag()) {
-            return;
-        }
-        if (gameEnded) {
-            return;
+            return; // Ignore when a player left-clicks a tile with a flag
         }
 
         // Generate new boards until the first tile revealed is a blank space
@@ -338,7 +333,7 @@ public class Game extends JFrame {
             int a = JOptionPane.showConfirmDialog(this, "Try again?", "You clicked on a bomb!", JOptionPane.YES_NO_OPTION);
             if (a == 0) {
                 this.setVisible(false);
-                new Main().setVisible(true);
+                new TitleScreen().setVisible(true);
             }
             return;
         }
