@@ -28,10 +28,10 @@ public class Game extends JFrame {
     private final JLabel flagsRemainingLabel;
     private final JLabel timerLabel;
 
-    private ScheduledExecutorService scheduler;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
-     * Sets up a game of Minesweeper that is ready to be started by the "start()" method.
+     * Sets up a game of Minesweeper that is ready to be started by the start() method.
      * @param difficulty The difficulty that the game will be set to. Changes the size of the board and amount of bombs.
      */
     public Game(Difficulties difficulty) {
@@ -170,7 +170,6 @@ public class Game extends JFrame {
         generateBoard();
 
         // Start timer
-        scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> timerLabel.setText(String.valueOf(Integer.parseInt(timerLabel.getText()) + 1)), 0, 1, TimeUnit.SECONDS);
         this.setVisible(true);
     }
@@ -280,7 +279,7 @@ public class Game extends JFrame {
     }
 
     /**
-     * Handles when a user right-clicks on a tile. It can place a flag, remove a flag, or handle when a player wins.
+     * Handles when a user right-clicks on a tile. It can place a flag or remove a flag.
      * @param tile The tile that was right-clicked on.
      */
     private void onRightClick(Tile tile) {
@@ -303,7 +302,7 @@ public class Game extends JFrame {
     }
 
     /**
-     * Handles when a player left-clicks on a tile. It can end the game or reveal tiles.
+     * Handles when a player left-clicks on a tile. It can win the game, end the game, or reveal tiles.
      * @param tile The tile that was left-clicked on.
      */
     private void onLeftClick(Tile tile) {
@@ -523,18 +522,20 @@ public class Game extends JFrame {
                     continue;
                 }
 
-                if (tile.getNumber() != 0) {
-                    tile.setText(String.valueOf(tile.getNumber()));
-                    switch (tile.getNumber()) {
-                        case 1 -> tile.setBackground(new Color(60, 0, 247));
-                        case 2 -> tile.setBackground(new Color(9, 131, 8));
-                        case 3 -> tile.setBackground(new Color(245, 0, 18));
-                        case 4 -> tile.setBackground(new Color(26, 0, 127));
-                        case 5 -> tile.setBackground(new Color(124, 0, 6));
-                        case 6 -> tile.setBackground(new Color(29, 128, 128));
-                        case 7 -> tile.setBackground(new Color(0, 0, 0));
-                        case 8 -> tile.setBackground(new Color(128, 128, 128));
-                    }
+                if (tile.getNumber() == 0) {
+                    continue;
+                }
+
+                tile.setText(String.valueOf(tile.getNumber()));
+                switch (tile.getNumber()) {
+                    case 1 -> tile.setBackground(new Color(60, 0, 247));
+                    case 2 -> tile.setBackground(new Color(9, 131, 8));
+                    case 3 -> tile.setBackground(new Color(245, 0, 18));
+                    case 4 -> tile.setBackground(new Color(26, 0, 127));
+                    case 5 -> tile.setBackground(new Color(124, 0, 6));
+                    case 6 -> tile.setBackground(new Color(29, 128, 128));
+                    case 7 -> tile.setBackground(new Color(0, 0, 0));
+                    case 8 -> tile.setBackground(new Color(128, 128, 128));
                 }
             }
         }
