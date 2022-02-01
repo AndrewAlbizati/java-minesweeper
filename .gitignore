@@ -4,7 +4,6 @@
 /build/
 *.iml
 
-*.jar
 minesweeper-lowest-times.properties
 
 # macOS files
